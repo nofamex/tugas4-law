@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  nginx:
+    build: ./nginx/
+    ports:
+      - 80:80
+
+  app:
+    build:
+      context: ./read/
+      target: Production
+    ports:
+      - 5002:5002
+    restart: always
+    depends_on:
+      - db
+      - nginx
+
+  db:
+    image: postgres:13.3-alpine
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: law
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tugas4law
+    ports:
+      - 5432:5432
+
+volumes:
+  db-data:
+    driver: local
