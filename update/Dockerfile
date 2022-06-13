@@ -3,6 +3,6 @@ WORKDIR /app
 COPY go.mod .env ./
 RUN go mod tidy
 COPY . .
-RUN go build -o simakara
-EXPOSE 5000
-CMD /app/simakara
+RUN go build -o update
+EXPOSE 5001
+CMD /app/update

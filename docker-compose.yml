@@ -1,11 +1,18 @@
 version: "3.8"
+networks:
+  tugas4law:
 services:
   nginx:
     build: ./nginx/
     ports:
       - 80:80
+    networks:
+      - tugas4law
+    depends_on:
+      - read
+      - update
 
-  app:
+  read:
     build:
       context: ./read/
       target: Production
@@ -14,7 +21,20 @@ services:
     restart: always
     depends_on:
       - db
-      - nginx
+    networks:
+      - tugas4law
+
+  update:
+    build:
+      context: ./update/
+      target: Production
+    ports:
+      - 5001:5001
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - tugas4law
 
   db:
     image: postgres:13.3-alpine
@@ -27,6 +47,8 @@ services:
       POSTGRES_DB: tugas4law
     ports:
       - 5432:5432
+    networks:
+      - tugas4law
 
 volumes:
   db-data:
